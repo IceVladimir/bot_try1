@@ -11,13 +11,15 @@ app.get('/', (req, res) => {
 
 app.post('/', function(req, res) {
 (async () => {
-	
+
   await characterAI.authenticateAsGuest();
   //var new_token = await characterAI.getToken1();
   //console.log(new_token);
   //var new_uuid = await characterAI.getUuid1();
   //console.log(new_uuid);
-  //await characterAI.setToken("31a41ac3ff76a5eda9d8951b2bc63f5623725744", "1fcd876e-d747-4203-a6f8-29e83ed47820")
+  if(req.body.token != ""){
+  await characterAI.setToken(req.body.token, req.body.uuid)
+  }
   // Place your character's id here
   const characterId = "v3lyisRb7INyd5BUdUKEKS1-MUTBom9dY9qV9-2ioTE";
 
@@ -25,10 +27,18 @@ app.post('/', function(req, res) {
 
   // Send a message
   const response = await chat.sendAndAwaitResponse(req.body.msg, true);
+	
+	
+  //console.log(response.text);
+  var new_token = await characterAI.getToken1();
+  var new_uuid = await characterAI.getUuid1();
   await characterAI.unauthenticate2();
   res.send({
     'Answer': response.text,
+	'Token': new_token,
+	'Uuid': new_uuid,
   });
+  
 })();
 });
 app.listen(process.env.PORT || 3000)
