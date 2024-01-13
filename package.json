@@ -1,12 +1,12 @@
 {
 "name": "bot1",
-"version": "1.0.1",
+"version": "1.0.2",
 "main": "bot1.js",
 "scripts":{
 	"start": "node bot1"
 },
   "dependencies": {
     "express": "^4.18.2",
-    "node_characterai_edited2": "^1.2.4"
+    "node_characterai_edited2": "^1.2.5"
   }
 }
