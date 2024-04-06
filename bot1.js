@@ -22,7 +22,7 @@ app.post('/', function(req, res) {
   var characterId;
   
   if (req.body.variant == 1){
-	  characterId = "v3lyisRb7INyd5BUdUKEKS1-MUTBom9dY9qV9-2ioTE"
+	  characterId = "mXzyPFgxh0IMoydznW110YnhiHF6ITNfiKAGklhsrjU"
   }else{  
 	  characterId = "roCAnDLY3GUGRwUS1iR_GncjvxvntJtdGFsDZGtPMBo";
   }
