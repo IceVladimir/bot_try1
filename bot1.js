@@ -18,11 +18,14 @@ app.post('/', function(req, res) {
   arr_of_puppets.set(select_uuid, new CharacterAI());
   await arr_of_puppets.get(select_uuid).authenticateWithToken("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd");
   
-  //if(req.body.token != ""){
-  //await arr_of_puppets.get(select_uuid).setToken(req.body.token, req.body.uuid)
-  //}
-  // Place your character's id here
-  const characterId = "v3lyisRb7INyd5BUdUKEKS1-MUTBom9dY9qV9-2ioTE";
+  
+  var characterId;
+  
+  if (req.body.variant == 1){
+	  characterId = "v3lyisRb7INyd5BUdUKEKS1-MUTBom9dY9qV9-2ioTE"
+  }else{  
+	  characterId = "roCAnDLY3GUGRwUS1iR_GncjvxvntJtdGFsDZGtPMBo";
+  }
 
   const chat = await arr_of_puppets.get(select_uuid).createOrContinueChat(characterId);
 
