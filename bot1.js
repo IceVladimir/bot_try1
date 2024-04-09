@@ -7,7 +7,7 @@ const CharacterAI = require("node_characterai");
 //const characterAI = new CharacterAI();	
 const arr_of_puppets = new Map();
 const {v4 : uuidv4} = require('uuid')
-
+const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d2f24b71bf2de303188d1c883dce0", "a11d77cad2f24263277cca8ac9315eeaa01700fd", "27ecfe97bc56402020659909c776172763dcb1f3");
 app.get('/', (req, res) => {
     res.json(["Tony","Lisa","Michael","Ginger","Food"]);
 })
@@ -16,7 +16,17 @@ app.post('/', function(req, res) {
 (async () => {
   var select_uuid = uuidv4();
   arr_of_puppets.set(select_uuid, new CharacterAI());
-  await arr_of_puppets.get(select_uuid).authenticateWithToken("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd");
+  var account;
+  
+  
+  if(req.body.account != ""){
+	account = req.body.account;
+  }else{
+	account = accounts[Math.floor(Math.random()*accounts.length)];
+	
+  }
+  
+  await arr_of_puppets.get(select_uuid).authenticateWithToken(account);
   
   
   var characterId;
@@ -49,6 +59,7 @@ app.post('/', function(req, res) {
   res.send({
     'Answer': response.text,
 	'Token': new_token,
+	'Account': account,
   });
 
 })();
