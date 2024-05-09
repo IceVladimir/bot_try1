@@ -12,6 +12,14 @@ app.get('/', (req, res) => {
     res.json(["Tony","Lisa","Michael","Ginger","Food"]);
 })
 
+app.get('/usage', (req, res) => {
+	var os = require('os-utils');
+	os.cpuUsage(function(v){
+		res.json([os.freemem(), v]);
+	});
+    
+})
+
 app.post('/', function(req, res) {
 (async () => {
   var select_uuid = uuidv4();
