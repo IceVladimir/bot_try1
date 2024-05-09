@@ -14,9 +14,7 @@ app.get('/', (req, res) => {
 
 app.get('/usage', (req, res) => {
 	var os = require('os-utils');
-	os.cpuUsage(function(v){
-		res.json([os.freemem(), v]);
-	});
+	res.json([os.freemem()]);
     
 })
 
