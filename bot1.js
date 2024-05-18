@@ -22,7 +22,7 @@ app.post('/', function(req, res) {
 (async () => {
   var select_uuid = uuidv4();
   var os = require('os-utils');
-  if (os.freemem() <= 500){
+  if (os.freemem() <= 1000){
 	res.send({
 		'Answer': "{servers are overloaded, please wait}",
 		'Token': req.body.token,
@@ -30,7 +30,7 @@ app.post('/', function(req, res) {
 	});
   }
   
-  if (arr_of_puppets.size >= 100){
+  if (arr_of_puppets.size >= 50){
 	res.send({
 		'Answer': "{servers are overloaded, please wait}",
 		'Token': req.body.token,
