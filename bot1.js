@@ -30,7 +30,7 @@ app.post('/', function(req, res) {
 	});
   }
   
-  if (arr_of_puppets.size >= 200){
+  if (arr_of_puppets.size >= 150){
 	res.send({
 		'Answer': "{servers are overloaded, please wait}",
 		'Token': req.body.token,
