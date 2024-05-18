@@ -30,6 +30,14 @@ app.post('/', function(req, res) {
 	});
   }
   
+  if (arr_of_puppets.size >= 150){
+	res.send({
+		'Answer': "{servers are overloaded, please wait}",
+		'Token': req.body.token,
+		'Account': req.body.account,
+	});
+  }
+  
   arr_of_puppets.set(select_uuid, new CharacterAI());
   var account;
   
