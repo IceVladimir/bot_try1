@@ -21,6 +21,15 @@ app.get('/usage', (req, res) => {
 app.post('/', function(req, res) {
 (async () => {
   var select_uuid = uuidv4();
+  var os = require('os-utils');
+  if (os.freemem() <= 500){
+	res.send({
+		'Answer': "{servers are overloaded, please wait}",
+		'Token': req.body.token,
+		'Account': req.body.account,
+	});
+  }
+  
   arr_of_puppets.set(select_uuid, new CharacterAI());
   var account;
   
