@@ -22,7 +22,7 @@ app.post('/', function(req, res) {
 (async () => {
   var select_uuid = uuidv4();
   var os = require('os-utils');
- if (os.freemem() <= 1500){
+ if (os.freemem() <= 1500.0){
 	res.send({
 		'Answer': "{servers are overloaded, please wait}",
 		'Token': req.body.token,
