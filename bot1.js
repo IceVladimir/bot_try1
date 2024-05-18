@@ -61,6 +61,7 @@ app.post('/', function(req, res) {
 	
   //console.log(response.text);
   await arr_of_puppets.get(select_uuid).unauthenticate();
+  await arr_of_puppets.get(select_uuid).requester.browser.close();
   arr_of_puppets.delete(select_uuid)
   res.send({
     'Answer': response.text,
