@@ -22,20 +22,22 @@ app.post('/', function(req, res) {
 (async () => {
   var select_uuid = uuidv4();
   var os = require('os-utils');
-  if (os.freemem() <= 1000){
+ if (os.freemem() <= 1000){
 	res.send({
 		'Answer': "{servers are overloaded, please wait}",
 		'Token': req.body.token,
 		'Account': req.body.account,
 	});
+	return;
   }
   
-  if (arr_of_puppets.size >= 80){
+  if (arr_of_puppets.size  >= 80){
 	res.send({
 		'Answer': "{servers are overloaded, please wait}",
 		'Token': req.body.token,
 		'Account': req.body.account,
 	});
+	return;
   }
   
   arr_of_puppets.set(select_uuid, new CharacterAI());
