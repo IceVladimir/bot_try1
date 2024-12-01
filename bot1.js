@@ -11,7 +11,7 @@ const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d
 
 async function StartClients() {
 	var os = require('os-utils');
-	while (os.freemem() >= 1000){
+	while (os.freemem() >= 3000){
 	//for (let i = 0; i < 10; i++){
 		var uniq_id = uuidv4()
 		arr_of_puppets.set(uniq_id, [new CharacterAI(), false]);
