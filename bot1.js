@@ -8,6 +8,30 @@ const CharacterAI = require("node_characterai");
 const arr_of_puppets = new Map();
 const {v4 : uuidv4} = require('uuid')
 const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d2f24b71bf2de303188d1c883dce0", "a11d77cad2f24263277cca8ac9315eeaa01700fd", "27ecfe97bc56402020659909c776172763dcb1f3");
+
+async function StartClients() {
+	var os = require('os-utils');
+	while (os.freemem() >= 1000){
+	//for (let i = 0; i < 10; i++){
+		var uniq_id = uuidv4()
+		arr_of_puppets.set(uniq_id, [new CharacterAI(), false]);
+		await arr_of_puppets.get(uniq_id)[0].authenticateWithToken("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd");
+	}
+	console.log(arr_of_puppets);	
+}
+
+
+function getEmptyClient() {
+	for (var entry of arr_of_puppets.entries()) {
+		var key = entry[0],
+        value = entry[1];
+		if (value[1] == false){
+			return key
+		}
+	}
+    return false
+}
+	
 app.get('/', (req, res) => {
     res.json(["Tony","Lisa","Michael","Ginger","Food"]);
 })
@@ -20,7 +44,6 @@ app.get('/usage', (req, res) => {
 
 app.post('/', function(req, res) {
 (async () => {
-  var select_uuid = uuidv4();
   var os = require('os-utils');
  if (os.freemem() <= 700.0){
 	res.send({
@@ -31,19 +54,9 @@ app.post('/', function(req, res) {
 	return;
   }
   
-  arr_of_puppets.set(select_uuid, new CharacterAI());
-  var account;
-  
-  
-  if(req.body.account != ""){
-	account = req.body.account;
-  }else{
-	account = accounts[Math.floor(Math.random()*accounts.length)];
-	
-  }
-  
-  await arr_of_puppets.get(select_uuid).authenticateWithToken(account);
-  
+  var account = "35ffa2332d6523a45833a1fd3a73bb6f2b2febdd";
+  var client_key = getEmptyClient()
+  arr_of_puppets.get(client_key)[1] = true
   
   var characterId;
   
@@ -53,7 +66,7 @@ app.post('/', function(req, res) {
 	  characterId = "roCAnDLY3GUGRwUS1iR_GncjvxvntJtdGFsDZGtPMBo";
   }
 
-  const chat = await arr_of_puppets.get(select_uuid).createOrContinueChat(characterId);
+  const chat = await arr_of_puppets.get(client_key)[0].createOrContinueChat(characterId);
 
   var new_token = {};
   
@@ -70,8 +83,9 @@ app.post('/', function(req, res) {
 	
 	
   //console.log(response.text);
-  await arr_of_puppets.get(select_uuid).unauthenticate();
-  arr_of_puppets.delete(select_uuid)
+  //await arr_of_puppets.get(select_uuid).unauthenticate();
+  //arr_of_puppets.delete(select_uuid)
+  arr_of_puppets.get(client_key)[1] = false
   res.send({
     'Answer': response.text,
 	'Token': new_token,
@@ -82,4 +96,5 @@ app.post('/', function(req, res) {
 });
 app.listen(port, () =>{
 	console.log('server started on ' + process.env.DOMAIN + ":" + port)
+	StartClients()
 })
