@@ -8,14 +8,14 @@ const CharacterAI = require("node_characterai");
 const arr_of_puppets = new Map();
 const {v4 : uuidv4} = require('uuid')
 const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d2f24b71bf2de303188d1c883dce0", "a11d77cad2f24263277cca8ac9315eeaa01700fd", "27ecfe97bc56402020659909c776172763dcb1f3");
-
-var os = require('os-utils');
-while (os.freemem() >= 4000){
-//for (let i = 0; i < 10; i++){
-	arr_of_puppets.set(uuidv4(), [new CharacterAI(), false, false]);
+async function StartClients() {
+	var os = require('os-utils');
+	while (os.freemem() >= 4000){
+	//for (let i = 0; i < 10; i++){
+		arr_of_puppets.set(uuidv4(), [new CharacterAI(), false, false]);
+	}
+	console.log(arr_of_puppets);
 }
-console.log(arr_of_puppets);
-
 
 
 function getEmptyClient() {
@@ -108,4 +108,5 @@ app.post('/', function(req, res) {
 });
 app.listen(port, () =>{
 	console.log('server started on ' + process.env.DOMAIN + ":" + port)
+	StartClients();
 })
