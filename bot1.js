@@ -9,16 +9,12 @@ const arr_of_puppets = new Map();
 const {v4 : uuidv4} = require('uuid')
 const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d2f24b71bf2de303188d1c883dce0", "a11d77cad2f24263277cca8ac9315eeaa01700fd", "27ecfe97bc56402020659909c776172763dcb1f3");
 
-async function StartClients() {
-	var os = require('os-utils');
-	while (os.freemem() >= 5000){
-	//for (let i = 0; i < 10; i++){
-		var uniq_id = uuidv4()
-		arr_of_puppets.set(uniq_id, [new CharacterAI(), false]);
-		await arr_of_puppets.get(uniq_id)[0].authenticateWithToken("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd");
-	}
-	console.log(arr_of_puppets);	
+var os = require('os-utils');
+while (os.freemem() >= 4000){
+//for (let i = 0; i < 10; i++){
+	arr_of_puppets.set(uuidv4(), [new CharacterAI(), false, false]);
 }
+
 
 
 function getEmptyClient() {
@@ -56,7 +52,22 @@ app.post('/', function(req, res) {
   
   var account = "35ffa2332d6523a45833a1fd3a73bb6f2b2febdd";
   var client_key = getEmptyClient()
+  
+  if (client_key == false){
+	  res.send({
+		'Answer': "{servers are overloaded, please wait}",
+		'Token': req.body.token,
+		'Account': req.body.account,
+	});
+	return;
+  }
   arr_of_puppets.get(client_key)[1] = true
+  
+  if (arr_of_puppets.get(client_key)[2] == false){
+	await arr_of_puppets.get(client_key)[0].authenticateWithToken(account);
+	arr_of_puppets.get(client_key)[2] = true
+  }
+  
   
   var characterId;
   
@@ -79,15 +90,15 @@ app.post('/', function(req, res) {
   }
 
   // Send a message
-  const response = await chat.sendAndAwaitResponse(req.body.msg, true);
-	
+  var response = await chat.sendAndAwaitResponse(req.body.msg, true);
+  if (response.text) response = response.text
 	
   //console.log(response.text);
   //await arr_of_puppets.get(select_uuid).unauthenticate();
   //arr_of_puppets.delete(select_uuid)
   arr_of_puppets.get(client_key)[1] = false
   res.send({
-    'Answer': response.text,
+    'Answer': response,
 	'Token': new_token,
 	'Account': account,
   });
@@ -96,5 +107,4 @@ app.post('/', function(req, res) {
 });
 app.listen(port, () =>{
 	console.log('server started on ' + process.env.DOMAIN + ":" + port)
-	StartClients()
 })
