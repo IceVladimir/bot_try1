@@ -14,6 +14,7 @@ while (os.freemem() >= 4000){
 //for (let i = 0; i < 10; i++){
 	arr_of_puppets.set(uuidv4(), [new CharacterAI(), false, false]);
 }
+console.log(arr_of_puppets);
 
 
 
