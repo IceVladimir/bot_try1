@@ -93,7 +93,10 @@ app.post('/', function(req, res) {
   // Send a message
   var response = await chat.sendAndAwaitResponse(req.body.msg, true);
   if (response.text) response = response.text
-	
+  if (response == "Error or Violent content") {
+	  new_token = "",
+	  account = "",
+  }
   //console.log(response.text);
   //await arr_of_puppets.get(select_uuid).unauthenticate();
   //arr_of_puppets.delete(select_uuid)
