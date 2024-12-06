@@ -96,6 +96,7 @@ app.post('/', function(req, res) {
   if (response == "Error or Violent content") {
 	  //new_token = "";
 	  //account = "";
+	  arr_of_puppets.get(client_key)[2] = false;
 	  arr_of_puppets.get(client_key)[0].unauthenticate();
   }
   //console.log(response.text);
