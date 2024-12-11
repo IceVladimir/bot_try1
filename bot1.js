@@ -77,11 +77,13 @@ app.post('/', function(req, res) {
   }else{  
 	  characterId = "roCAnDLY3GUGRwUS1iR_GncjvxvntJtdGFsDZGtPMBo";
   }
-
+  
+  try {
+	  
   const chat = await arr_of_puppets.get(client_key)[0].createOrContinueChat(characterId);
 
   var new_token = {};
-  
+  var response = "Error. Please try again!";
   if(req.body.token != ""){
 	await chat.changeToConversationId(req.body.token, true);
 	 new_token = req.body.token;
@@ -91,7 +93,7 @@ app.post('/', function(req, res) {
   }
 
   // Send a message
-  var response = await chat.sendAndAwaitResponse(req.body.msg, true);
+  response = await chat.sendAndAwaitResponse(req.body.msg, true);
   if (response.text) response = response.text
   if (response == "Error or Violent content") {
 	  //new_token = "";
@@ -103,6 +105,10 @@ app.post('/', function(req, res) {
   //await arr_of_puppets.get(select_uuid).unauthenticate();
   //arr_of_puppets.delete(select_uuid)
   arr_of_puppets.get(client_key)[1] = false
+  } catch (err) {
+	  arr_of_puppets.get(client_key)[1] = false
+	  arr_of_puppets.get(client_key)[0].unauthenticate();
+  }
   res.send({
     'Answer': response,
 	'Token': new_token,
