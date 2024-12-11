@@ -106,7 +106,8 @@ app.post('/', function(req, res) {
   //arr_of_puppets.delete(select_uuid)
   arr_of_puppets.get(client_key)[1] = false
   } catch (err) {
-	  arr_of_puppets.get(client_key)[1] = false
+	  arr_of_puppets.get(client_key)[1] = false;
+	  arr_of_puppets.get(client_key)[2] = false;
 	  arr_of_puppets.get(client_key)[0].unauthenticate();
   }
   res.send({
