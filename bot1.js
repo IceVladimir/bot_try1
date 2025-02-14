@@ -74,8 +74,10 @@ app.post('/', function(req, res) {
   
   if (req.body.variant == 1){
 	  characterId = "mXzyPFgxh0IMoydznW110YnhiHF6ITNfiKAGklhsrjU";
-  }else{  
+  }else if(req.body.variant == 2){  
 	  characterId = "roCAnDLY3GUGRwUS1iR_GncjvxvntJtdGFsDZGtPMBo";
+  }else if(req.body.variant == 3){
+	  characterId = "5g8yBVUX2cJ7dxUTjEG8oSUUU4uzg-gn4Dy-Y57XSno";
   }
   
   try {
