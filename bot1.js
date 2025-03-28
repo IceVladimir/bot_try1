@@ -18,7 +18,6 @@ async function StartClients() {
 	console.log(arr_of_puppets);
 }
 
-
 function getEmptyClient() {
 	for (var entry of arr_of_puppets.entries()) {
 		var key = entry[0],
@@ -29,16 +28,11 @@ function getEmptyClient() {
 	}
     return false
 }
-	
+
 app.get('/', (req, res) => {
     res.json(["Tony","Lisa","Michael","Ginger","Food"]);
 })
 
-app.get('/usage', (req, res) => {
-	var os = require('os-utils');
-	res.json([os.freemem()]);
-    
-})
 
 app.post('/', function(req, res) {
 (async () => {
@@ -117,3 +111,24 @@ app.listen(port, () =>{
 	console.log('server started on ' + process.env.DOMAIN + ":" + port)
 	StartClients();
 })
+
+/*
+(async () => {
+  // Authenticating as a guest (use `.authenticateWithToken()` to use an account)
+  await characterAI.authenticate("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd").then(async() => {
+	   console.log("Logged in");
+	   // start coding in here!
+  });
+  
+  const character = await characterAI.fetchCharacter("mXzyPFgxh0IMoydznW110YnhiHF6ITNfiKAGklhsrjU");
+  const dm = await character.DM(); 
+
+// send it a message
+  const message = await dm.sendMessage("hello");
+
+// get the text content
+  const content = message.content;
+
+  console.log(message);	
+})();
+*/
