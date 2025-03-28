@@ -3,11 +3,12 @@ const express = require('express')
 const app = express(), port=3001
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const CharacterAI = require("node_characterai");
-//const characterAI = new CharacterAI();	
+
+const { CharacterAI } = require("node_characterai");
+
 const arr_of_puppets = new Map();
 const {v4 : uuidv4} = require('uuid')
-const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d2f24b71bf2de303188d1c883dce0", "a11d77cad2f24263277cca8ac9315eeaa01700fd", "27ecfe97bc56402020659909c776172763dcb1f3");
+
 async function StartClients() {
 	var os = require('os-utils');
 	//while (os.freemem() >= 4000){
@@ -65,7 +66,7 @@ app.post('/', function(req, res) {
   arr_of_puppets.get(client_key)[1] = true
   
   if (arr_of_puppets.get(client_key)[2] == false){
-	await arr_of_puppets.get(client_key)[0].authenticateWithToken(account);
+	await arr_of_puppets.get(client_key)[0].authenticate(account);
 	arr_of_puppets.get(client_key)[2] = true
   }
   
@@ -74,44 +75,36 @@ app.post('/', function(req, res) {
   
   if (req.body.variant == 1){
 	  characterId = "mXzyPFgxh0IMoydznW110YnhiHF6ITNfiKAGklhsrjU";
-  }else if(req.body.variant == 2){  
+  }else{  
 	  characterId = "roCAnDLY3GUGRwUS1iR_GncjvxvntJtdGFsDZGtPMBo";
-  }else if(req.body.variant == 3){
-	  characterId = "5g8yBVUX2cJ7dxUTjEG8oSUUU4uzg-gn4Dy-Y57XSno";
   }
   
   try {
 	  
-  const chat = await arr_of_puppets.get(client_key)[0].createOrContinueChat(characterId);
-
+  const character = await arr_of_puppets.get(client_key)[0].fetchCharacter(characterId);
+  var dm;
   var new_token = {};
-  var response = "Error. Please try again!";
+  
   if(req.body.token != ""){
-	await chat.changeToConversationId(req.body.token, true);
-	 new_token = req.body.token;
+	  dm = await character.DM(req.body.token);
   }else{
-	 new_token = await chat.saveAndStartNewChat();
-	 new_token = new_token["external_id"]
-  }
-
-  // Send a message
-  response = await chat.sendAndAwaitResponse(req.body.msg, true);
-  if (response.text) response = response.text
+	  dm = await character.createDM(); 
+  }	
+  
+  response = await dm.sendMessage(req.body.msg);
+  new_token = response["chatId"]
+  if (response.content) response = response.content
   if (response == "Error or Violent content") {
-	  //new_token = "";
-	  //account = "";
 	  arr_of_puppets.get(client_key)[2] = false;
 	  arr_of_puppets.get(client_key)[0].unauthenticate();
   }
-  //console.log(response.text);
-  //await arr_of_puppets.get(select_uuid).unauthenticate();
-  //arr_of_puppets.delete(select_uuid)
   arr_of_puppets.get(client_key)[1] = false
   } catch (err) {
 	  arr_of_puppets.get(client_key)[1] = false;
 	  arr_of_puppets.get(client_key)[2] = false;
 	  arr_of_puppets.get(client_key)[0].unauthenticate();
   }
+ 
   res.send({
     'Answer': response,
 	'Token': new_token,
