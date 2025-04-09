@@ -42,9 +42,8 @@ app.get('/usage', (req, res) => {
 
 app.post('/', function(req, res) {
 (async () => {
-  console.log(ServerStatus, AccountAuth.length, accounts.length)
-  var cantUse = (ServerStatus == false || AccountAuth.length != accounts.length)
-  if(cantUse){
+  console.log(ServerStatus)
+  if(ServerStatus == false){
 	res.send({
 		'Answer': "Server starting, please wait!",
 		'Token': req.body.token,
@@ -52,7 +51,7 @@ app.post('/', function(req, res) {
   });
   }
 	
-  if (!cantUse){
+  if (ServerStatus == true){
 
   let chat;
   let character;
