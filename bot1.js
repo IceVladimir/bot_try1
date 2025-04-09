@@ -9,10 +9,6 @@ const accounts = Array("35ffa2332d6523a45833a1fd3a73bb6f2b2febdd", "a74fcf11914d
 const {v4 : uuidv4} = require('uuid')
 //const characterAI = new CharacterAI();
 
-
-let characterV1;
-let characterV2;
-let characterV3;
 var AccountAuth = new Map();
 var AccountChars = new Map();
 var ServerStatus = false;
@@ -64,9 +60,9 @@ app.post('/', function(req, res) {
   }
 	
 	
-  let chat;
-  let character;
-  let account;
+  var chat;
+  var character;
+  var account;
   
   if (req.body.account == ""){
 	  account = accounts[Math.floor(Math.random()*accounts.length)];
