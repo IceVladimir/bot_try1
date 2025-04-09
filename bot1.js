@@ -51,7 +51,7 @@ app.get('/usage', (req, res) => {
 app.post('/', function(req, res) {
 (async () => {
   
-  if(ServerStatus == false){
+  if(ServerStatus == false || AccountAuth.length != accounts.length){
 	res.send({
 		'Answer': "Server starting, please wait!",
 		'Token': req.body.token,
