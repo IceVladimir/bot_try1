@@ -62,12 +62,10 @@ app.post('/', function(req, res) {
   var client_key = getEmptyClient()
   
   if (client_key == false){
-	  res.send({
-		'Answer': "{servers are overloaded, please wait}",
-		'Token': req.body.token,
-		'Account': req.body.account,
-	});
-	return;
+	  var new_uuid = uuidv4();
+	  arr_of_puppets.set(new_uuid, [new CharacterAI(), false, false]);
+	  client_key = new_uuid;
+	  console.log("Created new!");
   }
   arr_of_puppets.get(client_key)[1] = true
   
